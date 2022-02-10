@@ -18,7 +18,7 @@ const { ccclass, property } = _decorator;
 @ccclass('UIMain')
 export class UIMain extends Component {
     @property
-    public planeSpeed = 1;
+    public planeSpeed = 6;
 
     @property(Node)
     public playerPlane: Node = null;
