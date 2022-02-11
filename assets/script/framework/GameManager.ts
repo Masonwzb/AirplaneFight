@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, instantiate, math } from 'cc';
+import { _decorator, Component, Node, Prefab, instantiate, math, Vec3 } from 'cc';
 import { Bullet } from "../bullet/Bullet";
 import { Constant } from "./Constant";
 import { EnemyPlane } from "../plane/EnemyPlane";
@@ -131,7 +131,15 @@ export class GameManager extends Component {
         const pos = this.playerPlane.position;
         bullet.setPosition(pos.x, pos.y, pos.z - 7);
         const bulletComp = bullet.getComponent(Bullet);
-        bulletComp.bulletSpeed = this.bulletSpeed;
+        bulletComp.show(this.bulletSpeed, false);
+    }
+
+    public createEnemyBullet(targetPos: Vec3) {
+        const bullet = instantiate(this.bullet01);
+        bullet.setParent(this.bulletRoot);
+        bullet.setPosition(targetPos.x, targetPos.y, targetPos.z + 6);
+        const bulletComp = bullet.getComponent(Bullet);
+        bulletComp.show(this.bulletSpeed, true);
     }
 
     public isShooting(value: boolean) {
@@ -153,7 +161,7 @@ export class GameManager extends Component {
         const enemy = instantiate(prefab);
         enemy.setParent(this.node);
         const enemyComp = enemy.getComponent(EnemyPlane);
-        enemyComp.show(speed);
+        enemyComp.show(this, speed, true);
 
         const randomPos = math.randomRangeInt(-25, 26);
         enemy.setPosition(randomPos, 0, -50);
@@ -167,7 +175,7 @@ export class GameManager extends Component {
             element.parent = this.node;
             element.setPosition(-20 + i * 10, 0, -50);
             const enemyComp = element.getComponent(EnemyPlane);
-            enemyComp.show(this.enemy1Speed);
+            enemyComp.show(this, this.enemy1Speed, false);
         }
     }
 
@@ -191,7 +199,7 @@ export class GameManager extends Component {
             const startIndex = i * 3;
             element.setPosition(combinationPos[startIndex], combinationPos[startIndex + 1], combinationPos[startIndex + 2]);
             const enemyComp = element.getComponent(EnemyPlane);
-            enemyComp.show(this.enemy1Speed);
+            enemyComp.show(this, this.enemy1Speed, false);
         }
     }
 

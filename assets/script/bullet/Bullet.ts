@@ -14,12 +14,12 @@ const { ccclass, property } = _decorator;
  *
  */
 
-const OUT_OF_RANGE = -50;
- 
 @ccclass('Bullet')
 export class Bullet extends Component {
     @property
-    public bulletSpeed = 0;
+    private bulletSpeed = 0;
+    @property
+    private isEnemyBullet = false;
 
     //  *******************************************生命周期回调函数********************************************************
     start () {
@@ -30,15 +30,30 @@ export class Bullet extends Component {
     //  *******************************************生命周期回调函数********************************************************
     update (deltaTime: number) {
         const pos = this.node.position;
-        const moveLength = pos.z - this.bulletSpeed;
-        this.node.setPosition(pos.x, pos.y, moveLength);
+        let moveLength = 0;
 
-        if (moveLength < OUT_OF_RANGE) {
-            this.node.destroy();
-            console.log('bullet destroyed');
+        if (this.isEnemyBullet) {
+            moveLength = pos.z + this.bulletSpeed;
+            if (moveLength > 50) {
+                this.node.destroy();
+                console.log('EnemyBullet bullet destroyed');
+            }
+        } else {
+            moveLength = pos.z - this.bulletSpeed;
+            if (moveLength < -50) {
+                this.node.destroy();
+                console.log('playerPlane bullet destroyed');
+            }
         }
+
+        this.node.setPosition(pos.x, pos.y, moveLength);
     }
     //  *******************************************生命周期回调函数********************************************************
+
+    public show(speed: number, isEnemyBullet: boolean) {
+        this.bulletSpeed = speed;
+        this.isEnemyBullet = isEnemyBullet;
+    }
 }
 
 /**
