@@ -850,8 +850,19 @@
       "__uuid__": "1731d2a7-f7ff-4441-a178-39674783a0aa",
       "__expectedType__": "cc.Prefab"
     },
+    "enemy01": {
+      "__uuid__": "a41cae79-83eb-4295-9218-dbd0005a34e7",
+      "__expectedType__": "cc.Prefab"
+    },
+    "enemy02": {
+      "__uuid__": "80f333f6-7f71-4735-9249-5b8517bbf1c1",
+      "__expectedType__": "cc.Prefab"
+    },
     "shootTime": 0.1,
     "bulletSpeed": 1,
+    "createEnemyTime": 1,
+    "enemy1Speed": 0.5,
+    "enemy2Speed": 0.7,
     "_id": "b3kYUNr6ZCepiOn+A7pW84"
   },
   {
