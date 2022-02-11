@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node } from 'cc';
+import {_decorator, Collider, Component, ITriggerEvent, Node} from 'cc';
 import { Constant } from "../framework/Constant";
 import { GameManager } from "../framework/GameManager";
 const { ccclass, property } = _decorator;
@@ -27,8 +27,23 @@ export class EnemyPlane extends Component {
     private currCreateBulletTime = 0;
     private gameManager: GameManager = null;
 
-    start () {
-        // [3]
+    onEnable () {
+        const collider = this.getComponent(Collider);
+        collider.on('onTriggerEnter', this.onTriggerEnter, this);
+    }
+
+    onDisable () {
+        const collider = this.getComponent(Collider);
+        collider.off('onTriggerEnter', this.onTriggerEnter, this);
+    }
+
+    private onTriggerEnter(event: ITriggerEvent) {
+        const collisionGroup = event.otherCollider.getGroup();
+        if (collisionGroup === Constant.CollisionType.SELF_PLANE || collisionGroup === Constant.CollisionType.SELF_BULLET) {
+            this.node.destroy();
+            this.gameManager.addScore();
+            console.log('trigger enemy destroy');
+        }
     }
 
     update (deltaTime: number) {
@@ -58,6 +73,7 @@ export class EnemyPlane extends Component {
         this.enemySpeed = speed;
         this.needBullet = needBullet;
     }
+
 }
 
 /**

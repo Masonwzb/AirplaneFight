@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, instantiate, math, Vec3 } from 'cc';
+import { _decorator, Component, Node, Prefab, instantiate, math, Vec3, BoxCollider } from 'cc';
 import { Bullet } from "../bullet/Bullet";
 import { Constant } from "./Constant";
 import { EnemyPlane } from "../plane/EnemyPlane";
@@ -57,11 +57,11 @@ export class GameManager extends Component {
     private currCreateEnemyTime = 0;
     private combinationInterval = Constant.Combination.PLAN1;
 
-    //  *******************************************生命周期回调函数********************************************************
+    //  *******************************************生命周期回调函数**************************************************start*
     start () {
         this.initial();
     }
-    //  *******************************************生命周期回调函数********************************************************
+    //  *******************************************生命周期回调函数**************************************************start*
 
     private initial() {
         this.currShootTime = this.shootTime;
@@ -76,7 +76,7 @@ export class GameManager extends Component {
         this.combinationInterval ++;
     }
 
-    //  *******************************************生命周期回调函数********************************************************
+    //  *******************************************生命周期回调函数*************************************************update*
     update (deltaTime: number) {
         this.currShootTime += deltaTime;
         if (this.planeIsShooting && this.currShootTime > this.shootTime) {
@@ -123,23 +123,27 @@ export class GameManager extends Component {
                 break;
         }
     }
-    //  *******************************************生命周期回调函数********************************************************
+    //  *******************************************生命周期回调函数********************************************update******
 
     public createPlayerBullet() {
-        const bullet = instantiate(this.bullet01);
-        bullet.setParent(this.bulletRoot);
-        const pos = this.playerPlane.position;
-        bullet.setPosition(pos.x, pos.y, pos.z - 7);
-        const bulletComp = bullet.getComponent(Bullet);
-        bulletComp.show(this.bulletSpeed, false);
+        // const bullet = instantiate(this.bullet01);
+        // bullet.setParent(this.bulletRoot);
+        // const pos = this.playerPlane.position;
+        // bullet.setPosition(pos.x, pos.y, pos.z - 7);
+        // const bulletComp = bullet.getComponent(Bullet);
+        // bulletComp.show(this.bulletSpeed, false);
     }
 
     public createEnemyBullet(targetPos: Vec3) {
-        const bullet = instantiate(this.bullet01);
-        bullet.setParent(this.bulletRoot);
-        bullet.setPosition(targetPos.x, targetPos.y, targetPos.z + 6);
-        const bulletComp = bullet.getComponent(Bullet);
-        bulletComp.show(this.bulletSpeed, true);
+        // const bullet = instantiate(this.bullet01);
+        // bullet.setParent(this.bulletRoot);
+        // bullet.setPosition(targetPos.x, targetPos.y, targetPos.z + 6);
+        // const bulletComp = bullet.getComponent(Bullet);
+        // bulletComp.show(this.bulletSpeed, true);
+        //
+        // const colliderComp = bullet.getComponent(BoxCollider);
+        // colliderComp.setGroup(Constant.CollisionType.ENEMY_BULLET);
+        // colliderComp.setMask(Constant.CollisionType.SELF_PLANE);
     }
 
     public isShooting(value: boolean) {
@@ -201,6 +205,9 @@ export class GameManager extends Component {
             const enemyComp = element.getComponent(EnemyPlane);
             enemyComp.show(this, this.enemy1Speed, false);
         }
+    }
+
+    public addScore() {
     }
 
 }
