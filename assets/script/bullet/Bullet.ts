@@ -17,10 +17,9 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Bullet')
 export class Bullet extends Component {
-    @property
     private bulletSpeed = 0;
-    @property
     private isEnemyBullet = false;
+    private direction = Constant.Direction.MIDDLE;
 
     //  *******************************************生命周期回调函数********************************************************
     onEnable () {
@@ -50,21 +49,31 @@ export class Bullet extends Component {
                 this.node.destroy();
                 console.log('EnemyBullet bullet destroyed');
             }
+            this.node.setPosition(pos.x, pos.y, moveLength);
         } else {
             moveLength = pos.z - this.bulletSpeed;
+
+            if (this.direction === Constant.Direction.LEFT) {
+                this.node.setPosition(pos.x - this.bulletSpeed * 0.2, pos.y, moveLength);
+            } else if (this.direction === Constant.Direction.RIGHT) {
+                this.node.setPosition(pos.x + this.bulletSpeed * 0.2, pos.y, moveLength);
+            } else {
+                this.node.setPosition(pos.x, pos.y, moveLength);
+            }
+
             if (moveLength < -50) {
                 this.node.destroy();
                 console.log('playerPlane bullet destroyed');
             }
         }
 
-        this.node.setPosition(pos.x, pos.y, moveLength);
     }
     //  *******************************************生命周期回调函数********************************************************
 
-    public show(speed: number, isEnemyBullet: boolean) {
+    public show(speed: number, isEnemyBullet: boolean, direction: number = Constant.Direction.MIDDLE) {
         this.bulletSpeed = speed;
         this.isEnemyBullet = isEnemyBullet;
+        this.direction = direction;
     }
 }
 
