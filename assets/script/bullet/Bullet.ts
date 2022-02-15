@@ -1,6 +1,7 @@
 
 import {_decorator, Collider, Component, ITriggerEvent, Node} from 'cc';
 import {Constant} from "../framework/Constant";
+import {PoolManager} from "../framework/PoolManager";
 const { ccclass, property } = _decorator;
 
 /**
@@ -33,8 +34,7 @@ export class Bullet extends Component {
     }
 
     private onTriggerEnter(event: ITriggerEvent) {
-        console.log('trigger bullet destroy');
-        this.node.destroy();
+        PoolManager.instance().putNode(this.node);
     }
     //  *******************************************生命周期回调函数********************************************************
 
@@ -46,8 +46,7 @@ export class Bullet extends Component {
         if (this.isEnemyBullet) {
             moveLength = pos.z + this.bulletSpeed;
             if (moveLength > 50) {
-                this.node.destroy();
-                console.log('EnemyBullet bullet destroyed');
+                PoolManager.instance().putNode(this.node);
             }
             this.node.setPosition(pos.x, pos.y, moveLength);
         } else {
@@ -62,8 +61,7 @@ export class Bullet extends Component {
             }
 
             if (moveLength < -50) {
-                this.node.destroy();
-                console.log('playerPlane bullet destroyed');
+                PoolManager.instance().putNode(this.node);
             }
         }
 

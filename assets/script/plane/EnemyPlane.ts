@@ -2,6 +2,7 @@
 import {_decorator, Collider, Component, ITriggerEvent, Node} from 'cc';
 import { Constant } from "../framework/Constant";
 import { GameManager } from "../framework/GameManager";
+import {PoolManager} from "../framework/PoolManager";
 const { ccclass, property } = _decorator;
 
 /**
@@ -40,9 +41,10 @@ export class EnemyPlane extends Component {
     private onTriggerEnter(event: ITriggerEvent) {
         const collisionGroup = event.otherCollider.getGroup();
         if (collisionGroup === Constant.CollisionType.SELF_PLANE || collisionGroup === Constant.CollisionType.SELF_BULLET) {
-            this.node.destroy();
+            PoolManager.instance().putNode(this.node);
             this.gameManager.addScore();
             this.gameManager.playAudioEffect('enemy');
+            this.gameManager.createEnemyExplodeEffect(this.node.position);
         }
     }
 
@@ -53,8 +55,7 @@ export class EnemyPlane extends Component {
         this.node.setPosition(pos.x, pos.y, moveZPos);
 
         if (moveZPos > OUT_OF_RANGE) {
-            this.node.destroy();
-            console.log('enemy plane destroyed');
+            PoolManager.instance().putNode(this.node);
         }
 
         // 子弹发射逻辑

@@ -50,6 +50,7 @@ export class UIMain extends Component {
             this.game.active = true;
             this.gameManager.gameStart();
             this.gameManager.playAudioEffect('button');
+            this.gameManager.isShooting(true);
         }
     }
 

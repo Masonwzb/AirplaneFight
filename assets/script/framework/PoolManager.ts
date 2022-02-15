@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node } from 'cc';
+import {_decorator, Component, instantiate, Node, NodePool, Prefab} from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -13,23 +13,59 @@ const { ccclass, property } = _decorator;
  * ManualUrl = https://docs.cocos.com/creator/3.4/manual/en/
  *
  */
- 
+interface IDictPool {
+    [name: string]: NodePool;
+}
+
+interface IDictPrefab {
+    [name: string]: Prefab;
+}
+
 @ccclass('PoolManager')
-export class PoolManager extends Component {
-    // [1]
-    // dummy = '';
+export class PoolManager {
 
-    // [2]
-    // @property
-    // serializableDummy = 0;
+    private static _instance: PoolManager;
 
-    start () {
-        // [3]
+    public static instance() {
+        if (!this._instance) {
+            this._instance = new PoolManager();
+        }
+
+        return this._instance;
     }
 
-    // update (deltaTime: number) {
-    //     // [4]
-    // }
+    private dictPool: IDictPool = {};
+    private dictPrefab: IDictPrefab = {};
+
+    public getNode(prefab: Prefab, parent: Node) {
+        let name = prefab.data.name;
+        let node: Node = null;
+        this.dictPrefab[name] = prefab;
+        const pool = this.dictPool[name];
+        if (pool) {
+            if (pool.size() > 0) {
+                node = pool.get();
+            } else {
+                node = instantiate(prefab);
+            }
+        } else {
+            this.dictPool[name] = new NodePool();
+            node = instantiate(prefab);
+        }
+
+        node.parent = parent;
+        node.active = true;
+        return node;
+    }
+
+    public putNode(node: Node) {
+        let name = node.name;
+        node.parent = null;
+        if (!this.dictPool[name]) {
+            this.dictPool[name] = new NodePool();
+        }
+        this.dictPool[name].put(node);
+    }
 }
 
 /**
