@@ -2,12 +2,12 @@
   "ver": "2.0.3",
   "importer": "animation-clip",
   "imported": true,
-  "uuid": "faf3a8fb-875c-4b0b-822d-813bd96f9068",
+  "uuid": "86fe8c93-478e-4e9a-8bff-dc35eeb8c125",
   "files": [
     ".cconb"
   ],
   "subMetas": {},
   "userData": {
-    "name": "animation"
+    "name": "fightBoxSettlement"
   }
 }

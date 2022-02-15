@@ -13,10 +13,13 @@ const { ccclass, property } = _decorator;
  * ManualUrl = https://docs.cocos.com/creator/3.4/manual/en/
  *
  */
- 
+
 @ccclass('SelfPlane')
 export class SelfPlane extends Component {
+    public lifeValue = 5;
+    public isDie = false;
 
+    private currLife = 0;
 
     onEnable () {
         const collider = this.getComponent(Collider);
@@ -36,8 +39,16 @@ export class SelfPlane extends Component {
     private onTriggerEnter(event: ITriggerEvent) {
         const collisionGroup = event.otherCollider.getGroup();
         if (collisionGroup === Constant.CollisionType.ENEMY_PLANE || collisionGroup === Constant.CollisionType.ENEMY_BULLET) {
-            console.log('trigger player reduce blood');
+            this.currLife--;
+            if (this.currLife <= 0) {
+                this.isDie = true;
+            }
         }
+    }
+
+    public initial() {
+        this.currLife = this.lifeValue;
+        this.isDie = false;
     }
 }
 
