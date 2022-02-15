@@ -5,6 +5,7 @@ import { Constant } from "./Constant";
 import { EnemyPlane } from "../plane/EnemyPlane";
 import { BulletProp } from "../bullet/BulletProp";
 import { SelfPlane } from "../plane/SelfPlane";
+import {AudioManager} from "./AudioManager";
 const { ccclass, property } = _decorator;
 
 /**
@@ -74,6 +75,10 @@ export class GameManager extends Component {
     @property(Animation)
     public overAnim: Animation = null;
 
+    // audio
+    @property(AudioManager)
+    public audioEffect: AudioManager = null;
+
     public isGameStart = false;
 
     private currShootTime = 0;
@@ -130,6 +135,10 @@ export class GameManager extends Component {
             } else {
                 this.createPlayerBulletM();
             }
+
+            const name = 'bullet' + (this.bulletType % 2 + 1);
+            this.playAudioEffect(name);
+
             this.currShootTime = 0;
         }
 
@@ -334,6 +343,8 @@ export class GameManager extends Component {
         this.combinationInterval = Constant.Combination.PLAN1;
         this.bulletType = Constant.BulletPropType.BULLET_M;
         this.playerPlane.node.setPosition(0, 0, 15);
+        this.changePlaneMode();
+        this.randomCreateBulletProp();
     }
 
     public restart() {
@@ -368,6 +379,10 @@ export class GameManager extends Component {
     public destroyAll() {
         this.node.removeAllChildren();
         this.bulletRoot.removeAllChildren();
+    }
+
+    public playAudioEffect(name: string) {
+        this.audioEffect.play(name);
     }
 
 }

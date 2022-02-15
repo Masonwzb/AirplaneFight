@@ -16,7 +16,7 @@ const { ccclass, property } = _decorator;
  *
  */
 const OUT_OF_RANGE = 50;
- 
+
 @ccclass('EnemyPlane')
 export class EnemyPlane extends Component {
     @property
@@ -42,7 +42,7 @@ export class EnemyPlane extends Component {
         if (collisionGroup === Constant.CollisionType.SELF_PLANE || collisionGroup === Constant.CollisionType.SELF_BULLET) {
             this.node.destroy();
             this.gameManager.addScore();
-            console.log('trigger enemy destroy');
+            this.gameManager.playAudioEffect('enemy');
         }
     }
 
